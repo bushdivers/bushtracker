@@ -12,7 +12,7 @@
     <Version>1.1.2.3</Version>
     <AssemblyVersion>1.1.2.3</AssemblyVersion>
     <FileVersion>1.1.2.3</FileVersion>
-    <UseWindowsForms>True</UseWindowsForms>
+    <UseWindowsForms>False</UseWindowsForms>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>Bush Tracker.snk</AssemblyOriginatorKeyFile>
     <DelaySign>false</DelaySign>
@@ -54,6 +54,7 @@
 
   <ItemGroup>
     <PackageReference Include="Autoupdater.NET.Official" Version="1.9.2" />
+    <PackageReference Include="Meziantou.Framework.SingleInstance" Version="1.1.11" />
   </ItemGroup>
 
   <ItemGroup>

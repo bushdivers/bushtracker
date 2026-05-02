@@ -97,11 +97,7 @@ namespace BushDiversTracker
             _notifyIcon.Icon = System.Drawing.Icon.ExtractAssociatedIcon(Assembly.GetExecutingAssembly().Location);
             _notifyIcon.Text = "Bush Tracker";
             _notifyIcon.Visible = false;
-            _notifyIcon.DoubleClick += delegate
-            {
-                Show();
-                WindowState = WindowState.Normal;
-            };
+            _notifyIcon.DoubleClick += (s, e) => ShowFromTray();
 
             lblTrackerStatus.Content = "Not tracking";
             lblFlightStatus.Visibility = Visibility.Hidden;
@@ -510,6 +506,13 @@ namespace BushDiversTracker
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             _simConnect?.OpenConnection();
+        }
+
+        public void ShowFromTray()
+        {
+            Show();
+            WindowState = WindowState.Normal;
+            _notifyIcon?.Visible = false;
         }
 
         private void Window_StateChanged(object sender, EventArgs e)
