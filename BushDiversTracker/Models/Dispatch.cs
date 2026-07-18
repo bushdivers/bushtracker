@@ -5,6 +5,8 @@ namespace BushDiversTracker.Models
 {
     class Dispatch
     {
+        [JsonPropertyName("id")]
+        public string Id { get; set; }
         [JsonPropertyName("departure_airport_id")]
         public string Departure { get; set; }
         [JsonPropertyName("destination_airport_id")]
@@ -33,8 +35,8 @@ namespace BushDiversTracker.Models
         public int PassengerCount { get; set; }
         [JsonPropertyName("total_payload")]
         public decimal TotalPayload { get; set; }
-        [JsonPropertyName("id")]
-        public string Id { get; set; }
+        [JsonPropertyName("payload_capacity")]
+        public decimal PayloadCapacity { get; set; }
         [JsonPropertyName("is_empty")]
         public int IsEmpty { get; set; }
         [JsonPropertyName("tour")]

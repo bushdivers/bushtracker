@@ -377,7 +377,7 @@ namespace BushDiversTracker.Services
                 // check for take off
                 if (FlightStatus == PirepStatusType.BOARDING && !onGround && data.alt_above_ground > 200) // arbitrary number to avoid advancing state on bouncy water takeoff
                 {
-                    if (!WeightValid(simFlightSettings.Value.total_weight, (double)dispatchData.TotalPayload))
+                    if (!WeightValid(simFlightSettings.Value.total_weight, (double)dispatchData.PayloadCapacity))
                     {
                         bFlightSettingsInvalidated = true;
                         HelperService.WriteToLog("Aborting flight after takeoff - Payload weight invalid");
@@ -564,7 +564,7 @@ namespace BushDiversTracker.Services
                     HelperService.WriteToLog("Flight settings changed: Slew mode enabled");
             }
 
-            if (dispatchData != null && !WeightValid(data.total_weight, (double)dispatchData.TotalPayload))
+            if (dispatchData != null && !WeightValid(data.total_weight, (double)dispatchData.PayloadCapacity))
             {
                 // TODO: If we ever do airdrop missions, this needs adjusting. or we need to dynamically adjust dispatchdata total payload
                 bool mustInvalidate = (!data.IsHelicopter || lastSimData.alt_above_ground > 100 || !AllowHeliSlings) 
@@ -627,7 +627,7 @@ namespace BushDiversTracker.Services
             if (data.Fuel < minVal || data.Fuel > maxVal)
                 fuelError = true;
 
-            cargoError = !WeightValid(data.FlightSettings.total_weight, (double)dispatchData.TotalPayload);
+            cargoError = !WeightValid(data.FlightSettings.total_weight, (double)dispatchData.PayloadCapacity);
             if (simFlightSettings.HasValue && simFlightSettings.Value.IsHelicopter && AllowHeliSlings)
                 cargoError = false;
 
