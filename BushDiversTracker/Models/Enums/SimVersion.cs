@@ -4,6 +4,7 @@
     {
         FS2020,
         FS2024,
-        XPlane12
+        XPlane12,
+        Fake
     }
 }

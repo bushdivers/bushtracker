@@ -22,6 +22,7 @@ namespace BushDiversTracker
     {
         APIService _api;
         AddonBrowser _addonBrowser;
+        DebugScenario _debugScenario;
         ISimService _simConnect;
         TrackerService _tracker;
         System.Windows.Forms.NotifyIcon _notifyIcon;
@@ -98,6 +99,11 @@ namespace BushDiversTracker
             _notifyIcon.Text = "Bush Tracker";
             _notifyIcon.Visible = false;
             _notifyIcon.DoubleClick += (s, e) => ShowFromTray();
+
+            if (System.Diagnostics.Debugger.IsAttached)
+                mnuSetSimFake.IsEnabled = true;
+            else
+                btnConnect.ContextMenu.Items.Remove(mnuSetSimFake);
 
             lblTrackerStatus.Content = "Not tracking";
             lblFlightStatus.Visibility = Visibility.Hidden;
@@ -292,7 +298,15 @@ namespace BushDiversTracker
             if (_tracker != null)
                 await _tracker.Stop();
 
-            _simConnect?.CloseConnection();
+            if (_simConnect != null)
+            {
+                _simConnect.CloseConnection();
+
+                _simConnect.OnSimConnected -= SimConnect_OnSimConnected;
+                _simConnect.OnSimDisconnected -= SimConnect_OnSimDisconnected;
+                _simConnect.OnSimDataReceived -= SimConnect_OnSimDataReceived;
+            }
+
             if (sender == mnuSetSimMSFS)
             {
                 _simConnect = new SimServiceMSFS(this);
@@ -300,18 +314,54 @@ namespace BushDiversTracker
                 lblConnectStatus.Content = "MSFS Connection Status:";
                 mnuSetSimMSFS.IsChecked = true;
                 mnuSetSimXP.IsChecked = false;
+                mnuSetSimFake.IsChecked = false;
+
+                if (_debugScenario != null)
+                {
+                    _debugScenario.Close();
+                    _debugScenario = null;
+                }
             }
-            else
+            else if (sender == mnuSetSimXP)
             {
                 _simConnect = null;
                 Settings.Default.SimType = "XP";
                 lblConnectStatus.Content = "XPlane Connection Status:";
                 mnuSetSimMSFS.IsChecked = false;
                 mnuSetSimXP.IsChecked = true;
+                mnuSetSimFake.IsChecked = false;
+
+                if (_debugScenario != null)
+                {
+                    _debugScenario.Close();
+                    _debugScenario = null;
+                }
+            }
+            else if (sender == mnuSetSimFake)
+            {
+                _simConnect = new SimServiceFake();
+                // Don't set default, as it's debug only
+                lblConnectStatus.Content = "Fake Sim [DEBUG]:";
+                mnuSetSimMSFS.IsChecked = false;
+                mnuSetSimXP.IsChecked = false;
+                mnuSetSimFake.IsChecked = true;
+
+                if (_debugScenario == null)
+                    _debugScenario = new DebugScenario((SimServiceFake)_simConnect);
+                _debugScenario.Show();
             }
 
-            if (e != null) 
-                _simConnect?.OpenConnection();
+            if (e != null)
+            {
+                if (_simConnect != null)
+                {
+                    _simConnect.OnSimConnected += SimConnect_OnSimConnected;
+                    _simConnect.OnSimDisconnected += SimConnect_OnSimDisconnected;
+                    _simConnect.OnSimDataReceived += SimConnect_OnSimDataReceived;
+                    _simConnect?.OpenConnection();
+                }
+                _tracker?.SetSimService(_simConnect);
+            }
         }
 
         private void rdoUnitType_Checked(object sender, RoutedEventArgs e)
@@ -327,6 +377,16 @@ namespace BushDiversTracker
             {
                 _addonBrowser.Close();
                 if (_addonBrowser != null)
+                {
+                    e.Cancel = true;
+                    return;
+                }
+            }
+
+            if (_debugScenario != null && _debugScenario.IsVisible)
+            {
+                _debugScenario.Close();
+                if (_debugScenario != null)
                 {
                     e.Cancel = true;
                     return;
@@ -427,6 +487,7 @@ namespace BushDiversTracker
                 Settings.Default.Key = txtKey.Password;
 
             lblFetch.Visibility = Visibility.Visible;
+            btnFetchBookings.IsEnabled = false;
             // make api request to get bookings/dispatch
 
             if (_tracker.State >= TrackerState.HasDispatch)
@@ -435,7 +496,6 @@ namespace BushDiversTracker
                     || MessageBox.Show("A flight is currently in progress. Are you sure you wish to cancel the current tracking and fetch another dispatch?", "Cancel tracking?", MessageBoxButton.YesNoCancel) == MessageBoxResult.Yes)
                 {
                     await _tracker.Stop();
-
                 }
             }
 
@@ -469,6 +529,7 @@ namespace BushDiversTracker
                     HelperService.WriteToLog($"Error fetching dispatch: {ex.Message}");
             }
             lblFetch.Visibility = Visibility.Hidden;
+            btnFetchBookings.IsEnabled = true;
         }
         #endregion
 

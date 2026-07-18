@@ -51,6 +51,7 @@
                         <ContextMenu>
                             <MenuItem Header="MSFS (SimConnect)" Click="btnConnect_SetSim" Name="mnuSetSimMSFS"/>
                             <MenuItem Header="XPlane" Click="btnConnect_SetSim" Name="mnuSetSimXP" IsEnabled="False" />
+                            <MenuItem Header="Fake Sim" Click="btnConnect_SetSim" Name="mnuSetSimFake" IsEnabled="False" />
                         </ContextMenu>
                     </Button.ContextMenu>
                 </Button>

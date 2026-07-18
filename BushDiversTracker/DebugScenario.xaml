@@ -1,0 +1,134 @@
+﻿<Window x:Class="BushDiversTracker.DebugScenario"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Scenario Injector [DEBUG]"
+        SizeToContent="Height" Width="420"
+        ResizeMode="NoResize" Topmost="True">
+    <StackPanel Margin="10">
+
+        <!-- Quick Scenarios -->
+        <GroupBox Header="Quick Scenarios" Margin="0,0,0,8">
+
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <Button Content="Idle on Ground"   Margin="3" Click="btnOnGround_Click"   Grid.Row="0" Grid.Column="0" HorizontalAlignment="Stretch"/>
+                <Button Content="Low Hover"        Margin="3" Click="btnTakeOff_Click"    Grid.Row="0" Grid.Column="1" HorizontalAlignment="Stretch"/>
+                <Button Content="Cruising"         Margin="3" Click="btnCruise_Click"     Grid.Row="0" Grid.Column="2" HorizontalAlignment="Stretch"/>
+                <Button Content="Final Approach"   Margin="3" Click="btnApproach_Click"   Grid.Row="1" Grid.Column="0" HorizontalAlignment="Stretch"/>
+                <Button Content="Land"             Margin="3" Click="btnLand_Click"       Grid.Row="1" Grid.Column="1" HorizontalAlignment="Stretch"/>
+                <Button Content="Disconnect"       Margin="3" Click="btnDisconnect_Click" Grid.Row="1" Grid.Column="2" HorizontalAlignment="Stretch"/>
+            </Grid>
+        </GroupBox>
+
+        <!-- Position -->
+        <GroupBox Header="Position" Margin="0,0,0,8">
+            <Grid Margin="4">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="80"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="80"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <Label Content="Lat:"      Grid.Row="0" Grid.Column="0" VerticalAlignment="Center"/>
+                <TextBox x:Name="txtLat"   Grid.Row="0" Grid.Column="1" Margin="2"/>
+                <Label Content="Lon:"      Grid.Row="0" Grid.Column="2" VerticalAlignment="Center"/>
+                <TextBox x:Name="txtLon"   Grid.Row="0" Grid.Column="3" Margin="2"/>
+                <Label Content="Alt (ft):" Grid.Row="1" Grid.Column="0" VerticalAlignment="Center"/>
+                <TextBox x:Name="txtAlt"   Grid.Row="1" Grid.Column="1" Margin="2"/>
+                <Label Content="AGL (ft):" Grid.Row="1" Grid.Column="2" VerticalAlignment="Center"/>
+                <TextBox x:Name="txtAgl"   Grid.Row="1" Grid.Column="3" Margin="2"/>
+                <Label Content="On Ground:" Grid.Row="2" Grid.Column="0" VerticalAlignment="Center"/>
+                <CheckBox x:Name="chkOnGround" Grid.Row="2" Grid.Column="1" Margin="4" VerticalAlignment="Center"/>
+            </Grid>
+        </GroupBox>
+
+        <!-- Engine / Speed -->
+        <GroupBox Header="Engine / Speed" Margin="0,0,0,8">
+            <Grid Margin="4">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="80"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="80"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <Label Content="Engine 1:"      Grid.Row="0" Grid.Column="0" VerticalAlignment="Center"/>
+                <CheckBox x:Name="chkEng1"      Grid.Row="0" Grid.Column="1" Margin="4" VerticalAlignment="Center"/>
+                <Label Content="Airspeed (kt):" Grid.Row="0" Grid.Column="2" VerticalAlignment="Center"/>
+                <TextBox x:Name="txtAirspeed"   Grid.Row="0" Grid.Column="3" Margin="2"/>
+                <Label Content="V/S (fpm):"     Grid.Row="1" Grid.Column="2" VerticalAlignment="Center"/>
+                <TextBox x:Name="txtVspeed"     Grid.Row="1" Grid.Column="3" Margin="2"/>
+            </Grid>
+        </GroupBox>
+
+        <!-- Aircraft / Weight -->
+        <GroupBox Header="Aircraft / Weight" Margin="0,0,0,8">
+            <Grid Margin="4">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="80"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="80"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <Label Content="Aircraft:"       Grid.Row="0" Grid.Column="0" VerticalAlignment="Center"/>
+                <TextBox x:Name="txtAircraftName" Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="3" Margin="2"/>
+                <Label Content="Payload (lb):"   Grid.Row="1" Grid.Column="0" VerticalAlignment="Center"/>
+                <TextBox x:Name="txtPayload"     Grid.Row="1" Grid.Column="1" Margin="2"/>
+                <Label Content="Fuel (gal):"     Grid.Row="1" Grid.Column="2" VerticalAlignment="Center"/>
+                <TextBox x:Name="txtFuel"        Grid.Row="1" Grid.Column="3" Margin="2"/>
+            </Grid>
+        </GroupBox>
+
+        <!-- Landing event -->
+        <GroupBox Header="Landing Event" Margin="0,0,0,8">
+            <Grid Margin="4">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="80"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="80"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Label Content="G-Force:"    Grid.Row="0" Grid.Column="0" VerticalAlignment="Center"/>
+                <TextBox x:Name="txtGforce" Grid.Row="0" Grid.Column="1" Margin="2" Text="1.1"/>
+                <Label Content="V/S (fpm):"  Grid.Row="0" Grid.Column="2" VerticalAlignment="Center"/>
+                <TextBox x:Name="txtLandingVs" Grid.Row="0" Grid.Column="3" Margin="2" Text="-200"/>
+            </Grid>
+        </GroupBox>
+
+        <!-- Action buttons -->
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,0,0,4">
+            <Button Content="Save Sim Data"   Width="125" Margin="4,2"
+                    ToolTip="Update current sim state with position/engine values"
+                    Click="btnPushData_Click"/>
+            <Button Content="Save AC settings"   Width="125" Margin="4,2"
+                    ToolTip="Fire OnFlightSettingsReceived with current aircraft/weight values"
+                    Click="btnPushSettings_Click"/>
+            <Button Content="Trigger Landing" Width="125" Margin="4,2"
+                    ToolTip="Fire OnLandingDataReceived"
+                    Click="btnTriggerLanding_Click"/>
+    
+        </StackPanel>
+
+    </StackPanel>
+</Window>

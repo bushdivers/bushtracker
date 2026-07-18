@@ -107,6 +107,13 @@ namespace BushDiversTracker.Services
         {
             await Stop();
 
+            if (_sim != null)
+            {
+                _sim.OnSimDataReceived -= SimService_OnSimDataReceived;
+                _sim.OnLandingDataReceived -= SimService_OnLandingDataReceived;
+                _sim.OnFlightSettingsReceived -= SimService_OnFlightSettingsReceived;
+            }
+
             _sim = simService;
             if (_sim != null)
             {
